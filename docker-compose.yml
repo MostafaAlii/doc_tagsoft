@@ -52,6 +52,21 @@ services:
     networks:
       - tagsoft_network
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_docker
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: db
+      #MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - tagsoft_network
+
 networks:
   tagsoft_network:
     driver: bridge
