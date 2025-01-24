@@ -1,7 +1,3 @@
-networks:
-  tagsoft_network:
-    driver: bridge
-
 services:
   webserver:
     image: nginx:latest
@@ -35,3 +31,31 @@ services:
       - "./environment/php/local.ini:/usr/local/etc/php/local.ini"
     networks:
       - tagsoft_network
+
+  db:
+    image: mysql:latest
+    container_name: db_docker
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "4306:3306"
+    environment:
+      MYSQL_DATABASE: db_docker
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_NAME: mysql
+      SERVICE_TAGS: dev
+    volumes:
+      - db:/var/lib/mysql
+      - ./environment/mysql/my.conf:/etc/mysql/my.conf
+    networks:
+      - tagsoft_network
+
+networks:
+  tagsoft_network:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
